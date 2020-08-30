@@ -8,8 +8,14 @@ const port = 3000
 // static file, file tĩnh thì vào hàm static kiểm tra thư mục đc truyền vào static (các file tĩnh trong thư mục 'public')
 app.use(express.static(path.join(__dirname, 'public')))
 
+// midleware
+app.use(express.urlencoded({
+  extended: true
+}))
+app.use(express.json())
+
 //HTTP logger
-app.use(morgan('combined'))
+//app.use(morgan('combined'))
 
 // template engine
 app.engine('hbs', handlebars({
@@ -24,6 +30,14 @@ app.get('/', (req, res) => {
 
 app.get('/news', (req, res) => {
   res.render('news');
+})
+
+app.get('/search', (req, res) => {
+  res.render('search');
+})
+
+app.post('/search', (req, res) => {
+  res.send('');
 })
 
 app.listen(port, () => {
