@@ -3,7 +3,7 @@ const siteRouter = require('./site');
 
 function route(app) {
     // trỏ vào newsRouter
-     app.use('/news', newsRouter);
+    app.use('/news', newsRouter);
 
     app.use('/', siteRouter);
 }
