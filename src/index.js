@@ -5,7 +5,11 @@ const handlebars = require('express-handlebars');
 const app = express();
 const port = 3000;
 
-const route = require('./routes');
+const route = require('./routes/index');
+const db = require('./config/db/index');
+
+// connect to DB
+db.connect();
 
 // static file, file tĩnh thì vào hàm static kiểm tra thư mục đc truyền vào static (các file tĩnh trong thư mục 'public')
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,7 +33,7 @@ app.engine(
     }),
 );
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'resources/views'));
+app.set('views', path.join(__dirname, 'resources', 'views'));
 
 // Routes init
 route(app);
