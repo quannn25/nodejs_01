@@ -1,8 +1,5 @@
 const Item = require('../models/item');
-const {
-    mutipleMongoseToObject,
-    multipleMongoseToObject,
-} = require('../../util/mongoose');
+const { multipleMongoseToObject } = require('../../util/mongoose');
 
 class SiteController {
     // [GET] /
