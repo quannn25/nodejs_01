@@ -6,6 +6,7 @@ const Item = new Schema({
     id: { type: String, default: '0' },
     total: { type: String, default: '0' },
     price: { type: String, default: '0' },
+    image: { type: String },
 });
 
 module.exports = mongoose.model('item', Item);
