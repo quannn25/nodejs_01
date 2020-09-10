@@ -2,7 +2,7 @@ const Item = require('../models/item');
 const { mongooseToObject } = require('../../util/mongoose');
 
 class ItemController {
-    // [GET] /item/:slug
+    // [GET] /items/:slug
     show(req, res, next) {
         Item.findOne({ slug: req.params.slug })
             .then((item) =>
@@ -10,6 +10,19 @@ class ItemController {
             )
 
             .catch(next);
+    }
+
+    // [GET] /items/create
+    create(req, res, next) {
+        res.render('items/create');
+    }
+
+    // [POST] /items/store
+    store(req, res, next) {
+        const item = new Item(req.body);
+        item.save()
+            .then(() => res.redirect('/'))
+            .catch((error) => {});
     }
 }
 
