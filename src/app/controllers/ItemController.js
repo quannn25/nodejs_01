@@ -1,5 +1,6 @@
 const Item = require('../models/item');
 const { mongooseToObject } = require('../../util/mongoose');
+const item = require('../models/item');
 
 class ItemController {
     // [GET] /items/:slug
@@ -23,6 +24,20 @@ class ItemController {
         item.save()
             .then(() => res.redirect('/'))
             .catch((error) => {});
+    }
+    // [GET] /items/:id/edit
+    edit(req, res, next) {
+        Item.findById(req.params.id)
+            .then((item) =>
+                res.render('items/edit', { item: mongooseToObject(item) }),
+            )
+            .catch(next);
+    }
+    // [PUT] /items/:id
+    update(req, res, next) {
+        Item.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect('/me/stored/items'))
+            .catch(next);
     }
 }
 

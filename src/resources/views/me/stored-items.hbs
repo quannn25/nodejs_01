@@ -1,0 +1,30 @@
+<div class="mt-4">
+    <h3>Sản phẩm của tôi</h3>
+
+        <table class="table mt-4">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Giá</th>
+            <th scope="col" colspan="2">Kho</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each item}}
+        <tr>
+            <th scope="row">{{sum @index 1}}</th>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.total}}</td>
+            <td>
+                <a href="/items/{{this._id}}/edit" class="btn btn-link">Sửa</a>
+                 <a href="" class="btn btn-link">Xóa</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+</div>
