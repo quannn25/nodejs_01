@@ -9,6 +9,7 @@ router.get('/create', itemController.create);
 router.post('/store', itemController.store);
 router.get('/:id/edit', itemController.edit);
 router.put('/:id', itemController.update);
+router.delete('/:id', itemController.delete);
 router.get('/:slug', itemController.show);
 
 module.exports = router;

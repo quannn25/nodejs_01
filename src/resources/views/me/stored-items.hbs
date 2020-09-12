@@ -21,10 +21,60 @@
             <td>{{this.total}}</td>
             <td>
                 <a href="/items/{{this._id}}/edit" class="btn btn-link">Sửa</a>
-                 <a href="" class="btn btn-link">Xóa</a>
+                 <a href="" class="btn btn-link" data-toggle="modal" data-target="#delete-item" data-id="{{this._id}}">Xóa</a>
+                 {{! data-id => id formDelete}}
             </td>
         </tr>
         {{/each}}
     </tbody>
     </table>
 </div>
+
+
+{{!-- confirm delete --}}
+{{! id => data-target}}
+<div id="delete-item" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xóa sản phẩm?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-item" type="button" class="btn btn-danger">Xóa bỏ</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{! delete form}}
+<form name="delete form" method="POST" ></form>
+
+<script>
+// phải load DOMContent lên mới jQuery dc
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var deleteForm = document.forms['delete form']
+    var itemId;
+    //data-id của btn xóa truyền id vào đây
+      $('#delete-item').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      itemId = button.data('id')
+  });
+
+// lấy nút 'xóa bỏ' màu đỏ by id
+  var btnDeleteItem =  document.getElementById('btn-delete-item');
+// khi click 'xóa bỏ'
+  btnDeleteItem.onclick = function(){
+     deleteForm.action = '/items/' + itemId + '?_method=DELETE';
+     deleteForm.submit();
+  }
+
+})
+</script>

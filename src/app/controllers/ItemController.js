@@ -35,8 +35,17 @@ class ItemController {
     }
     // [PUT] /items/:id
     update(req, res, next) {
+        //req.body la update toan bo .body
         Item.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('/me/stored/items'))
+            .catch(next);
+    }
+
+    // [DELETE] /items/:id
+    delete(req, res, next) {
+        Item.deleteOne({ _id: req.params.id })
+            // 'back' la quay lai
+            .then(() => res.redirect('back'))
             .catch(next);
     }
 }
