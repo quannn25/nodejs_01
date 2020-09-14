@@ -15,6 +15,17 @@ class MeController {
             )
             .catch(next);
     }
+
+    // [GET] /me/trash/items
+    trashItems(req, res, next) {
+        Item.findDeleted({})
+            .then((item) =>
+                res.render('me/trash-items', {
+                    item: multipleMongoseToObject(item),
+                }),
+            )
+            .catch(next);
+    }
 }
 
 // 'module.exports' dùng cho khi require() thì trả về (new NewsController) là 1 thể hiện của NewsController

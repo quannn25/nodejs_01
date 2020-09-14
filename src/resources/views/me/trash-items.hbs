@@ -1,7 +1,7 @@
 <div class="mt-4">
     <div>
-      <h3>Sản phẩm của tôi</h3>
-      <a href="/me/trash/items">Sản phẩm đã xóa</a>
+      <h3>Sản phẩm đã xóa</h3>
+      <a href="/me/stored/items">Quay lại danh sách sản phẩm.</a>
     </div>
 
         <table class="table mt-4">
@@ -23,8 +23,8 @@
             <td>{{this.price}}</td>
             <td>{{this.total}}</td>
             <td>
-                <a href="/items/{{this._id}}/edit" class="btn btn-link">Sửa</a>
-                 <a href="" class="btn btn-link" data-toggle="modal" data-target="#delete-item" data-id="{{this._id}}">Xóa</a>
+                <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Khôi phục</a>
+                 <a href="" class="btn btn-link" data-toggle="modal" data-target="#delete-item" data-id="{{this._id}}">Xóa vĩnh viễn</a>
                  {{! data-id => id formDelete}}
             </td>
         </tr>
@@ -32,8 +32,7 @@
         {{else}}
         <tr>
           <td colspan="5" class="text-center">
-            Không có sản phẩm nào.
-            <a href="/items/create"> Tạo sản phẩm mới.</a>
+            Không có sản phẩm nào bị xóa.
           </td>
         </tr>
 
@@ -55,10 +54,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+        <p>Bạn có chắc muốn xóa vĩnh viễn sản phẩm này?</p>
       </div>
       <div class="modal-footer">
-        <button id="btn-delete-item" type="button" class="btn btn-danger">Xóa bỏ</button>
+        <button id="btn-delete-item" type="button" class="btn btn-danger">Xóa vĩnh viễn</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
       </div>
     </div>
@@ -67,12 +66,14 @@
 
 {{! delete form}}
 <form name="delete form" method="POST" ></form>
+<form name="restore form" method="POST" ></form>
 
 <script>
 // phải load DOMContent lên mới jQuery dc
 
   document.addEventListener('DOMContentLoaded', function(){
     var deleteForm = document.forms['delete form']
+    var restoreForm = document.forms['restore form']
     var itemId;
     //data-id của btn xóa truyền id vào đây
       $('#delete-item').on('show.bs.modal', function (event) {
@@ -82,11 +83,19 @@
 
 // lấy nút 'xóa bỏ' màu đỏ by Id
   var btnDeleteItem =  document.getElementById('btn-delete-item');
-// khi click 'xóa bỏ'
+  var btnRestore = $('.btn-restore');
+// khi click 'xóa bỏ vĩnh viễn'
   btnDeleteItem.onclick = function(){
-     deleteForm.action = '/items/' + itemId + '?_method=DELETE';
+     deleteForm.action = '/items/' + itemId + '/force?_method=DELETE';
      deleteForm.submit();
   }
+  // restore
+  btnRestore.click(function(e){
+      e.preventDefault();
+      var itemId = $(this).data('id');
+      restoreForm.action = '/items/' + itemId + '/restore?_method=PATCH';
+      restoreForm.submit();
+  });
 
 })
 </script>

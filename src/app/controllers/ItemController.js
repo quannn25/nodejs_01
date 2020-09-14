@@ -1,6 +1,5 @@
 const Item = require('../models/item');
 const { mongooseToObject } = require('../../util/mongoose');
-const item = require('../models/item');
 
 class ItemController {
     // [GET] /items/:slug
@@ -22,7 +21,7 @@ class ItemController {
     store(req, res, next) {
         const item = new Item(req.body);
         item.save()
-            .then(() => res.redirect('/'))
+            .then(() => res.redirect('/me/stored/items'))
             .catch((error) => {});
     }
     // [GET] /items/:id/edit
@@ -43,7 +42,22 @@ class ItemController {
 
     // [DELETE] /items/:id
     delete(req, res, next) {
+        Item.delete({ _id: req.params.id })
+            // 'back' la quay lai
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
+    // [DELETE] /items/:id/force
+    forceDelete(req, res, next) {
         Item.deleteOne({ _id: req.params.id })
+            // 'back' la quay lai
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
+
+    // [PATCH] /items/:id/restore
+    restore(req, res, next) {
+        Item.restore({ _id: req.params.id })
             // 'back' la quay lai
             .then(() => res.redirect('back'))
             .catch(next);
