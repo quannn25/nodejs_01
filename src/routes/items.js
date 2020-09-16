@@ -8,6 +8,7 @@ const itemController = require('../app/controllers/ItemController');
 router.get('/create', itemController.create);
 router.post('/store', itemController.store);
 router.get('/:id/edit', itemController.edit);
+router.post('/handle-form-actions', itemController.handleFormActions);
 router.put('/:id', itemController.update);
 router.patch('/:id/restore', itemController.restore);
 router.delete('/:id', itemController.delete);

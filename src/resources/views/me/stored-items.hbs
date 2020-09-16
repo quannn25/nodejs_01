@@ -1,13 +1,29 @@
-<div class="mt-4">
+<form class="mt-4" name="container-form" method="POST" action="/items/handle-form-actions">
     <div>
       <h3>Sản phẩm của tôi</h3>
       <a href="/me/trash/items">Sản phẩm đã xóa ({{deletedCount}})</a>
+        <div class="mt-4 d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+                        <label class="form-check-label" for="checkbox-all">
+                          chọn tất cả
+                        </label>
+                      </div>
+                <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
+                    <option value="">--Hành động--</option>
+                    <option value="delete">Xóa</option>
+                  </select>
+
+                  <button class="btn btn-primary btn-sm check-all-submit-btn disabled">
+                    Thực hiện
+                  </button>
+            </div>
     </div>
 
         <table class="table mt-4">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col" colspan="2">#</th>
             <th scope="col">ID</th>
             <th scope="col">Tên sản phẩm</th>
             <th scope="col">Giá</th>
@@ -17,6 +33,11 @@
     <tbody>
         {{#each item}}
         <tr>
+          <td>
+            <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="itemIds[]" value="{{this._id}}">
+              </div>
+          </td>
             <th scope="row">{{sum @index 1}}</th>
             <td>{{this.id}}</td>
             <td>{{this.name}}</td>
@@ -40,7 +61,7 @@
         {{/each}}
     </tbody>
     </table>
-</div>
+</form>
 
 
 {{!-- confirm delete --}}
@@ -72,12 +93,18 @@
 // phải load DOMContent lên mới jQuery dc
 
   document.addEventListener('DOMContentLoaded', function(){
+    var containerForm = document.forms['container-form']
     var deleteForm = document.forms['delete form']
     var itemId;
+    // jQuery lấy ra đc checkbox
+    var checkboxAll = $('#checkbox-all');
+    var itemCheckBox = $('input[name="itemIds[]"]')
+    var checkAllSubmitBtn = $('.check-all-submit-btn')
+
     //data-id của btn xóa truyền id vào đây
       $('#delete-item').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      itemId = button.data('id')
+      var button = $(event.relatedTarget);
+      itemId = button.data('id');
   });
 
 // lấy nút 'xóa bỏ' màu đỏ by Id
@@ -86,6 +113,43 @@
   btnDeleteItem.onclick = function(){
      deleteForm.action = '/items/' + itemId + '?_method=DELETE';
      deleteForm.submit();
+  }
+
+  //checkBox all changed
+  checkboxAll.change(function() {
+      var isChecked = $(this).prop('checked');
+      itemCheckBox.prop('checked', isChecked);
+      renderCheckAllSubmitBtn();
+  });
+
+  //any itemCheckBox changed
+  itemCheckBox.change(function() {
+    var isCheckedAll = itemCheckBox.length === $('input[name="itemIds[]"]:checked').length;
+    checkboxAll.prop('checked', isCheckedAll);
+    renderCheckAllSubmitBtn();
+  });
+
+  // check all submit btn clicked
+
+  checkAllSubmitBtn.on('submit', function(e){
+    var isSubmittable = !$(this).hasClass('disabled');
+    if (!isSubmittable) {
+      e.preventDefault();
+    }
+  });
+
+
+  // re-render check all submit btn
+  function renderCheckAllSubmitBtn() {
+    var checkedCount = $('input[name="itemIds[]"]:checked').length;
+    if(checkedCount > 0)
+    {
+      checkAllSubmitBtn.removeClass('disabled')
+    }
+    else
+    {
+      checkAllSubmitBtn.addClass('disabled')
+    }
   }
 
 })

@@ -62,6 +62,22 @@ class ItemController {
             .then(() => res.redirect('back'))
             .catch(next);
     }
+
+    // [POST] /items/handle-form-actions
+    handleFormActions(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                // document mongoose $in:
+                Item.delete({ _id: { $in: req.body.itemIds } })
+                    // 'back' la quay lai
+                    .then(() => res.redirect('back'))
+                    .catch(next);
+
+                break;
+            default:
+                res.json({ message: 'Action is invalid!' });
+        }
+    }
 }
 
 // 'module.exports' dùng cho khi require() thì trả về (new NewsController) là 1 thể hiện của NewsController
