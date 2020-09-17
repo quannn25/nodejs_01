@@ -14,7 +14,7 @@
                     <option value="delete">Xóa</option>
                   </select>
 
-                  <button class="btn btn-primary btn-sm check-all-submit-btn disabled">
+                  <button class="btn btn-primary btn-sm check-all-submit-btn" disabled>
                     Thực hiện
                   </button>
             </div>
@@ -25,9 +25,18 @@
         <tr>
             <th scope="col" colspan="2">#</th>
             <th scope="col">ID</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Giá</th>
-            <th scope="col" colspan="2">Kho</th>
+            <th scope="col">
+              Tên sản phẩm
+              {{{sortable 'name' _sort}}}
+              </th>
+            <th scope="col">
+              Giá
+              {{{sortable 'price' _sort}}}
+            </th>
+            <th scope="col" colspan="2">
+              Kho
+              {{{sortable 'total' _sort}}}
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -93,7 +102,8 @@
 // phải load DOMContent lên mới jQuery dc
 
   document.addEventListener('DOMContentLoaded', function(){
-    var containerForm = document.forms['container-form']
+   // var containerForm = document.forms['container-form']
+    var containerForm = $('form[name="container-form"]');
     var deleteForm = document.forms['delete form']
     var itemId;
     // jQuery lấy ra đc checkbox
@@ -129,14 +139,6 @@
     renderCheckAllSubmitBtn();
   });
 
-  // check all submit btn clicked
-
-  checkAllSubmitBtn.on('submit', function(e){
-    var isSubmittable = !$(this).hasClass('disabled');
-    if (!isSubmittable) {
-      e.preventDefault();
-    }
-  });
 
 
   // re-render check all submit btn
@@ -144,11 +146,11 @@
     var checkedCount = $('input[name="itemIds[]"]:checked').length;
     if(checkedCount > 0)
     {
-      checkAllSubmitBtn.removeClass('disabled')
+      checkAllSubmitBtn.attr('disabled', false)
     }
     else
     {
-      checkAllSubmitBtn.addClass('disabled')
+      checkAllSubmitBtn.attr('disabled', true)
     }
   }
 
