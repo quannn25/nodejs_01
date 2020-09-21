@@ -19,6 +19,18 @@ const Item = new Schema(
     },
 );
 
+//custom query helpers
+Item.query.sortable = function (req) {
+    if (req.query.hasOwnProperty('_sort')) {
+        const isValidtype = ['asc', 'desc'].includes(req.query.type);
+        return this.sort({
+            [req.query.column]: isValidtype ? req.query.type : 'desc',
+        });
+    }
+    return this;
+};
+
+// add plugin
 Item.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true });
 mongoose.plugin(slug);
 

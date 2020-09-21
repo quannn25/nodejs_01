@@ -8,16 +8,7 @@ const item = require('../models/item');
 class MeController {
     // [GET] /me/stored/items
     storedItems(req, res, next) {
-        let itemQuery = Item.find({});
-
-        // sort
-        if (req.query.hasOwnProperty('_sort')) {
-            itemQuery = itemQuery.sort({
-                [req.query.column]: req.query.type,
-            });
-        }
-
-        Promise.all([itemQuery, Item.countDocumentsDeleted()])
+        Promise.all([Item.find({}).sortable(req), Item.countDocumentsDeleted()])
             .then(([item, deletedCount]) =>
                 res.render('me/stored-items', {
                     deletedCount,
